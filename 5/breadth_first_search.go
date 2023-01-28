@@ -45,6 +45,7 @@ func setEdge(graph *Graph, src, dest int) {
 	graph.Vertexs[dest].AdjacentList[src] = graph.Vertexs[src]
 }
 
+// bfs using FIFO.
 func bfs(graph *Graph, src int) {
 
 	fmt.Println(src)
@@ -65,7 +66,7 @@ func bfs(graph *Graph, src int) {
 		}
 
 		// get next queue
-		nextVertex, *graph.Stack = (*graph.Stack)[0], (*graph.Stack)[1:len(*graph.Stack)-1]
+		nextVertex = dequeue(graph)
 		if !graph.Vertexs[nextVertex].IsVisited {
 			bfs(graph, nextVertex)
 		}
@@ -73,11 +74,24 @@ func bfs(graph *Graph, src int) {
 	return
 }
 
+func dequeue(graph *Graph) int {
+	nextVertex := (*graph.Stack)[0]
+	if len(*graph.Stack) == 1 {
+		*graph.Stack = []int{}
+	} else {
+		*graph.Stack = (*graph.Stack)[1:]
+	}
+
+	return nextVertex
+}
+
 func main() {
-	graph := newGraph(5)
+	graph := newGraph(7)
+	setEdge(graph, 0, 1)
 	setEdge(graph, 0, 2)
-	setEdge(graph, 1, 3)
-	setEdge(graph, 1, 2)
+	setEdge(graph, 0, 3)
 	setEdge(graph, 2, 4)
+	setEdge(graph, 2, 5)
+	setEdge(graph, 3, 6)
 	bfs(graph, 0)
 }
