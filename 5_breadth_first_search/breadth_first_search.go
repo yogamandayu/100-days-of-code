@@ -16,7 +16,7 @@ type Vertex struct {
 type Graph struct {
 	Vertices int
 	Vertexs  []*Vertex
-	Stack    *[]int
+	Queue    *[]int
 }
 
 func newGraph(totalVertices int) *Graph {
@@ -24,7 +24,7 @@ func newGraph(totalVertices int) *Graph {
 		Vertices: totalVertices,
 	}
 	graph.Vertexs = make([]*Vertex, graph.Vertices)
-	graph.Stack = &[]int{}
+	graph.Queue = &[]int{}
 	return graph
 }
 
@@ -55,13 +55,13 @@ func bfs(graph *Graph, src int) {
 
 	for i, vertex := range graph.Vertexs[src].AdjacentList {
 		if vertex != nil && !vertex.IsVisited {
-			*graph.Stack = append(*graph.Stack, i)
+			*graph.Queue = append(*graph.Queue, i)
 		}
 	}
 
 	var nextVertex int
 	for {
-		if len(*graph.Stack) == 0 || graph.Stack == nil {
+		if len(*graph.Queue) == 0 || graph.Queue == nil {
 			break
 		}
 
@@ -75,11 +75,11 @@ func bfs(graph *Graph, src int) {
 }
 
 func dequeue(graph *Graph) int {
-	nextVertex := (*graph.Stack)[0]
-	if len(*graph.Stack) == 1 {
-		*graph.Stack = []int{}
+	nextVertex := (*graph.Queue)[0]
+	if len(*graph.Queue) == 1 {
+		*graph.Queue = []int{}
 	} else {
-		*graph.Stack = (*graph.Stack)[1:]
+		*graph.Queue = (*graph.Queue)[1:]
 	}
 
 	return nextVertex
