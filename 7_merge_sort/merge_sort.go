@@ -2,19 +2,17 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
 )
 
 func main() {
 	arr := []int{0, 5, 4, 7, 3, 2, 2, 8, 1}
 	sortedArr := mergeSort(arr)
-	log.Println(sortedArr)
+	fmt.Println(sortedArr)
 }
 
 // Node contain value and left right node.
 type Node struct {
-	Top   *Node
 	Arr   []int
 	Left  *Node
 	Right *Node
@@ -32,26 +30,18 @@ func mergeSort(arr []int) []int {
 
 // divide is to divide node until array only have 1 value or until the node leaf.
 func divide(node *Node) {
-	fmt.Println(node.Arr)
 	if len(node.Arr) == 1 {
 		return
 	}
 
 	mid := int(math.Ceil(float64(len(node.Arr)) / 2))
-	fmt.Println(mid)
 	node.Left = &Node{
-		Top:   node,
-		Arr:   node.Arr[0:mid],
-		Left:  &Node{},
-		Right: &Node{},
+		Arr: node.Arr[0:mid],
 	}
 	divide(node.Left)
 
 	node.Right = &Node{
-		Top:   node,
-		Arr:   node.Arr[mid:],
-		Left:  &Node{},
-		Right: &Node{},
+		Arr: node.Arr[mid:],
 	}
 	divide(node.Right)
 
@@ -60,47 +50,34 @@ func divide(node *Node) {
 // conquer is to compare and merge left and right node.
 func conquer(node *Node) {
 	if node.Left != nil {
-		fmt.Println(node.Left.Arr)
 		conquer(node.Left)
-	}
-	if node.Right != nil {
-		fmt.Println(node.Right.Arr)
 		conquer(node.Right)
-	}
-	if node.Top == nil {
+	} else {
 		return
 	}
 
+	var i, j int
 	var arr []int
-	var indexLeft, indexRight int
 	for {
-		fmt.Println("arr", arr)
-		left := node
-		right := node.Top.Right
+		if i == len(node.Left.Arr) {
+			arr = append(arr, node.Right.Arr[j:]...)
+			break
+		}
 
-		if indexLeft == len(left.Arr)-1 {
-			arr = append(arr, right.Arr...)
+		if j == len(node.Right.Arr) {
+			arr = append(arr, node.Left.Arr[i:]...)
 			break
 		}
-		if indexRight == len(right.Arr)-1 {
-			arr = append(arr, left.Arr...)
-			break
-		}
-		if left.Arr[indexLeft] >= right.Arr[indexRight] {
-			arr = append(arr, left.Arr[indexLeft])
-			indexLeft++
+
+		if node.Left.Arr[i] <= node.Right.Arr[j] {
+			arr = append(arr, node.Left.Arr[i])
+			i++
 			continue
 		}
-		if right.Arr[indexRight] >= left.Arr[indexLeft] {
-			arr = append(arr, right.Arr[indexRight])
-			indexRight++
-			continue
-		}
+		arr = append(arr, node.Right.Arr[j])
+		j++
 	}
-	if node.Top == nil {
-		return
-	}
-	log.Println(arr)
-	node.Top.Arr = arr
+
+	node.Arr = arr
 	return
 }
