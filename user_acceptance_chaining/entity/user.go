@@ -1,7 +1,5 @@
 package entity
 
-import "fmt"
-
 /*
 This code is for demonstrating user acceptance chaining.
 User connect each other as a graph or linked list.
@@ -14,14 +12,14 @@ ONE_OF mean only need acceptance.
 */
 
 type User struct {
-	Name       string // Identifier
-	OrderTurn  int
-	IsTurn     bool // Flagging
-	IsAccepted bool // Flagging
-	Next       []*User
+	Name string // Identifier
 
-	// Coupled is for represented user purpose.
-	CanBeAcceptedBy []*User
+	Order int
+
+	IsTurn     bool // Flagging``
+	IsAccepted bool // Flagging
+
+	Next []*User
 }
 
 func NewUser(name string) User {
@@ -31,10 +29,7 @@ func NewUser(name string) User {
 }
 
 func (u *User) PrintToLastConnectedUser() {
-	if len(u.Next) == 0 {
-		return
-	}
 	for _, user := range u.Next {
-		fmt.Printf("Name %s Order %d", user.Name, user.OrderTurn)
+		user.PrintToLastConnectedUser()
 	}
 }

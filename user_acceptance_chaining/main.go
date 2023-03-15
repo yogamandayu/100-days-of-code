@@ -14,11 +14,9 @@ func main() {
 	workflow := entity.NewWorkflow()
 	workflow.
 		InitUser(&user1).
-		NextSerial().To(&user2).
-		NextSequence().
-		NextParallel().To(&user3).To(&user4).
-		NextSequence().
-		NextSerial().To(&user5)
+		NextSetParallel().To(&user2, &user3).
+		NextSetSerial().To(&user4).
+		NextSetParallel().To(&user5)
 
-	user2.PrintToLastConnectedUser()
+	user1.PrintToLastConnectedUser()
 }
